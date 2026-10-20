@@ -1,4 +1,4 @@
-<img src="assets/logo.svg" alt="Pic2Pics" width="340">
+<img src="assets/logo.svg?v=2" alt="Pic2Pics" width="340">
 
 [简体中文](README.md) | [English](README.en.md)
 
