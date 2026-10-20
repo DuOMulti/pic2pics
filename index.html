@@ -79,6 +79,8 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       </button>
       <aside class="help-popover" id="helpPopover" aria-hidden="true">
         <div class="help-top"><strong>使用说明</strong><button class="close-help" id="closeHelp" type="button" aria-label="关闭">×</button></div>
+        <h3>如何添加截图？</h3>
+        <p>截图后在页面空白处按 Ctrl+V（Windows）或 ⌘V（Mac）即可粘贴。也可以拖入图片或选择本地文件。编辑参数时粘贴操作不会被截获。</p>
         <h3>切分高度怎么选？</h3>
         <p>1800 px 是本工具的默认起始值，不是 GPT 官方规定。没有适用于所有图片的固定高度：文字越小、内容越密集，可以尝试 1200–1600 px；想保留更多页面上下文，可以尝试 1800–2400 px。切分后仍应检查文字是否清晰。</p>
         <h3>重叠区域有什么用？</h3>
@@ -98,8 +100,8 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       <h2 class="section-title">选择长截图</h2>
       <label class="drop" id="dropZone" for="fileInput">
         <span class="upload-icon">↑</span>
-        <strong>选择图片</strong>
-        <span class="unit">PNG · JPG · WebP</span>
+        <strong>选择图片 · 或直接粘贴截图</strong>
+        <span class="unit">Ctrl+V / ⌘V · PNG · JPG · WebP</span>
       </label>
       <input id="fileInput" type="file" accept="image/*" hidden>
       <div class="file-meta" id="fileMeta">尚未选择图片</div>
@@ -242,6 +244,32 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     img.onerror=()=>setStatus('无法读取这张图片，请换一张试试。');
     img.src=sourceUrl;
   }
+  // Paste an image directly from the system clipboard; leave text fields alone.
+  document.addEventListener('paste', e => {
+    const target = e.target;
+    if (target instanceof Element &&
+        (target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]') ||
+         target.isContentEditable)) return;
+    const clipboard = e.clipboardData;
+    if (!clipboard) return;
+    let file = null;
+    if (clipboard.items) {
+      for (const item of clipboard.items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          file = item.getAsFile();
+          if (file) break;
+        }
+      }
+    }
+    if (!file && clipboard.files) {
+      file = Array.from(clipboard.files).find(f => f.type.startsWith('image/')) || null;
+    }
+    if (!file) return; // Ordinary text paste should keep its default behavior.
+    e.preventDefault();
+    const ext = file.type === 'image/jpeg' ? 'jpg' : file.type === 'image/webp' ? 'webp' : 'png';
+    const pasted = new File([file], '粘贴截图.' + ext, {type: file.type || 'image/png'});
+    loadFile(pasted);
+  });
   fileInput.addEventListener('change',e=>loadFile(e.target.files&&e.target.files[0]));
   ['dragenter','dragover'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.add('drag');}));
   ['dragleave','drop'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.remove('drag');}));
