@@ -14,7 +14,7 @@ button,input,select{font:inherit}
 .shell{max-width:1120px;margin:0 auto;padding:28px 20px 42px}
 header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:20px}
 h1{font-size:25px;letter-spacing:-.5px;line-height:1.2;margin:0;font-weight:750}
-.header-right{position:relative;flex-shrink:0}
+.header-right{position:relative;flex-shrink:0;display:flex;align-items:center;gap:8px}.lang-btn{border:1px solid var(--line);border-radius:999px;background:#fff;color:#3e4652;cursor:pointer;padding:9px 11px;font-size:12px;font-weight:650;min-width:54px}.lang-btn:hover{background:#fbfcff;border-color:#c6d2e4}
 .help-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#3e4652;cursor:pointer;box-shadow:0 2px 6px #1e293b08}
 .help-btn:hover{border-color:#c6d2e4;background:#fbfcff}
 .help-icon{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#eef1f6;color:#465063;font-size:12px;font-weight:700}
@@ -81,6 +81,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   <header>
     <h1>Pic2Pics</h1>
     <div class="header-right" id="helpWrap">
+      <button id="langBtn" class="lang-btn" type="button" aria-label="Switch to English">EN</button>
       <button class="help-btn" id="helpBtn" type="button" aria-expanded="false" aria-controls="helpPopover">
         <span class="help-icon">?</span><span>使用说明</span>
       </button>
@@ -232,7 +233,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     if(!image){
       $('dimensions').textContent='—';$('count').value='';$('count').disabled=true;
       $('countPlus').disabled=true;$('countMinus').disabled=true;$('widthStat').textContent='—';
-      $('folderBtn').disabled=true;$('zipBtn').disabled=true;$('previewTag').textContent='等待图片';
+      $('folderBtn').disabled=true;$('zipBtn').disabled=true;$('previewTag').textContent=tr('等待图片','Waiting for image');
       document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Number(b.dataset.height)===Number(heightInput.value)));
       return;
     }
@@ -245,7 +246,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     $('countMinus').disabled=starts.length<=1;
     $('widthStat').textContent=`${image.naturalWidth} px`;
     $('folderBtn').disabled=false;$('zipBtn').disabled=false;
-    $('previewTag').textContent=`${starts.length} 张 · 重叠 ${s.o}px`;
+    $('previewTag').textContent=tr(`${starts.length} 张 · 重叠 ${s.o}px`,`${starts.length} slices · ${s.o}px overlap`);
     document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Number(b.dataset.height)===s.h));
     drawPreview(s,starts);
   }
@@ -258,7 +259,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       const py=Math.round(y*scale);
       ctx.save();ctx.strokeStyle='#1769ff';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
       ctx.beginPath();ctx.moveTo(0,py+.5);ctx.lineTo(w,py+.5);ctx.stroke();ctx.setLineDash([]);
-      const label=`第 ${i+1} 张`;
+      const label=tr(`第 ${i+1} 张`,`Slice ${i+1}`);
       ctx.font='bold 11px sans-serif';
       const tw=ctx.measureText(label).width;
       const ly=Math.min(Math.max(2,py+3),Math.max(2,h-19));
@@ -274,16 +275,16 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   }
   function loadFile(file){
     if(!file)return;
-    if(!file.type.startsWith('image/')){setStatus('请选择图片文件。');return;}
+    if(!file.type.startsWith('image/')){setStatus(tr('请选择图片文件。','Please choose an image.'));return;}
     if(sourceUrl)URL.revokeObjectURL(sourceUrl);
     sourceUrl=URL.createObjectURL(file);
     const img=new Image();
     img.onload=()=>{
       image=img;editMode='height';heightInput.max=20000;loadedFile=file;sourceName=safeBaseName(file.name);
       $('fileMeta').textContent=`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
-      setStatus('图片已载入。','success');update();
+      setStatus(tr('图片已载入。','Image loaded.'),'success');update();
     };
-    img.onerror=()=>setStatus('无法读取这张图片，请换一张试试。');
+    img.onerror=()=>setStatus(tr('无法读取这张图片，请换一张试试。','Unable to read this image. Try another file.'));
     img.src=sourceUrl;
   }
   // Paste an image directly from the system clipboard; leave text fields alone.
@@ -334,6 +335,72 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   document.addEventListener('pointerdown',e=>{if(!e.target.closest('#helpWrap'))setHelp(false);});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')setHelp(false);});
 
+  // Chinese is the default; remember only explicit language choices.
+  let lang='zh';
+  try { if(localStorage.getItem('pic2pics-language')==='en')lang='en'; } catch(_) {}
+  const tr=(zh,en)=>lang==='en'?en:zh;
+  const UI_TEXT={
+    '使用说明':'Help','选择长截图':'Choose a long screenshot',
+    '选择图片 · 或直接粘贴截图':'Choose image · or paste screenshot',
+    '尚未选择图片':'No image selected','切分设置':'Slice settings',
+    '每张图片高度':'Slice height','相邻图片重叠':'Overlap between slices',
+    '导出格式':'Export format','原图尺寸':'Original size',
+    '分图数量':'Number of slices','单图宽度':'Slice width',
+    '导出到本地文件夹':'Save to local folder','打包下载 ZIP':'Download ZIP',
+    '下载全部分图（ZIP）':'Download all slices (ZIP)',
+    '切分预览':'Slice preview','等待图片':'Waiting for image',
+    '预览将在这里显示':'Preview will appear here',
+    'PNG · 无损':'PNG · Lossless','JPG · 体积较小':'JPG · Smaller file',
+    'WebP · 体积较小':'WebP · Smaller file',
+    '如何添加截图？':'How to add a screenshot?',
+    '切分高度怎么选？':'How to choose slice height?',
+    '重叠区域有什么用？':'Why overlap slices?',
+    '导出到文件夹':'Export to a folder','ZIP 备用导出':'ZIP export',
+    '隐私与清晰度':'Privacy and quality'
+  };
+  const HELP_EN=[
+    'After taking a screenshot, press Ctrl+V (Windows) or ⌘V (Mac) while the page is focused. You can also drag and drop an image or choose a local file. Pasting while editing an input will not be intercepted.',
+    '1800 px is a starting point, not an official GPT recommendation. Try 1200–1600 px for smaller or denser text, or 1800–2400 px to keep more context. Always check whether the resulting text is readable.',
+    'Type the desired number of slices or use + / −. Slice height adjusts automatically. Very short images or a large overlap may limit the number of possible slices.',
+    'Adjacent slices repeat a small region to preserve context. The default is 120 px; use 0 for no overlap. More overlap may increase the number and size of outputs.',
+    'Select a parent folder when you click Save to local folder. A new subfolder named after the source image will contain all slices. Your browser will request permission.',
+    'For phones, download a ZIP. On iPhone, find and unzip it in the Files app; on Android, use the Downloads folder and file manager. The steps depend on your browser. Desktop users can also download a ZIP.',
+    'Images are processed locally in your browser and are not uploaded. Very large screenshots can exceed mobile memory limits; try reducing the number of slices. PNG suits text and webpages; JPG uses lossy compression.'
+  ];
+  const originalTextNodes=[];
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  while(walker.nextNode()){
+    const node=walker.currentNode;
+    if(node.parentElement?.closest('script,style'))continue;
+    const base=node.nodeValue;
+    if(Object.hasOwn(UI_TEXT,base.trim()))originalTextNodes.push([node,base,UI_TEXT[base.trim()]]);
+  }
+  const helpOriginal=[...$('helpPopover').querySelectorAll('p')].map(p=>p.textContent);
+  const helpParas=[...$('helpPopover').querySelectorAll('p')];
+  const originalLabels={plus:$('countPlus').getAttribute('aria-label'),minus:$('countMinus').getAttribute('aria-label'),count:$('count').getAttribute('aria-label')};
+  function applyLanguage(){
+    document.documentElement.lang=lang==='en'?'en':'zh-CN';
+    $('langBtn').textContent=lang==='en'?'中文':'EN';
+    $('langBtn').setAttribute('aria-label',lang==='en'?'切换到中文':'Switch to English');
+    for(const [node,base,en] of originalTextNodes)
+      node.nodeValue=lang==='en'?base.replace(base.trim(),en):base;
+    helpParas.forEach((p,i)=>p.textContent=lang==='en'?HELP_EN[i]:helpOriginal[i]);
+    $('countPlus').setAttribute('aria-label',tr(originalLabels.plus,'Add one slice'));
+    $('countMinus').setAttribute('aria-label',tr(originalLabels.minus,'Remove one slice'));
+    $('count').setAttribute('aria-label',tr(originalLabels.count,'Number of slices'));
+    $('closeHelp').setAttribute('aria-label',tr('关闭','Close'));
+    $('fileMeta').textContent=loadedFile?loadedFile.name+' · '+(loadedFile.size/1024/1024).toFixed(2)+' MB':tr('尚未选择图片','No image selected');
+    if(mobileMode)$('zipBtn').textContent=tr('下载全部分图（ZIP）','Download all slices (ZIP)');
+    if(image)setStatus(tr('图片已载入。','Image loaded.'),'success');
+    else setStatus('');
+    update();
+  }
+  $('langBtn').addEventListener('click',()=>{
+    lang=lang==='zh'?'en':'zh';
+    try{localStorage.setItem('pic2pics-language',lang);}catch(_){}
+    applyLanguage();
+  });
+
   // ZIP writer (store method, UTF-8 file names)
   const crcTable=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xedb88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
   function crc32(bytes){let c=0xffffffff;for(let i=0;i<bytes.length;i++)c=crcTable[(c^bytes[i])&255]^(c>>>8);return(c^0xffffffff)>>>0;}
@@ -366,7 +433,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       const blob=await canvasBlob(canvas,type);
       const filename=`${sourceName}_${String(i+1).padStart(digits,'0')}.${ext}`;
       await onSlice({blob,filename,index:i+1,total:starts.length});
-      setStatus(`正在处理 ${i+1} / ${starts.length} 张…`);
+      setStatus(tr(`正在处理 ${i+1} / ${starts.length} 张…`,`Processing ${i+1} / ${starts.length} slices…`));
       await new Promise(r=>setTimeout(r,0));
     }
     return starts.length;
@@ -374,7 +441,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   async function writeToFolder(){
     if(!image)return;
     if(!('showDirectoryPicker' in window)){
-      setStatus('当前浏览器不支持直接写入文件夹，请使用 ZIP 导出。');return;
+      setStatus(tr('当前浏览器不支持直接写入文件夹，请使用 ZIP 导出。','This browser cannot save directly to folders. Please use ZIP export.'));return;
     }
     const btn=$('folderBtn'),zipBtn=$('zipBtn');btn.disabled=true;zipBtn.disabled=true;
     try{
@@ -388,10 +455,10 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
         const handle=await folder.getFileHandle(filename,{create:true});
         const writable=await handle.createWritable();await writable.write(blob);await writable.close();completed++;
       });
-      setStatus(`完成：已将 ${completed} 张图片保存到「${folderName}」。`,'success');
+      setStatus(tr(`完成：已将 ${completed} 张图片保存到「${folderName}」。`,`Done: Saved ${completed} slices in “${folderName}”.`),'success');
     }catch(err){
-      if(err&&err.name==='AbortError')setStatus('已取消文件夹选择。');
-      else{console.error(err);setStatus('写入文件夹失败，请检查浏览器权限，或改用 ZIP 导出。');}
+      if(err&&err.name==='AbortError')setStatus(tr('已取消文件夹选择。','Folder selection cancelled.'));
+      else{console.error(err);setStatus(tr('写入文件夹失败，请检查浏览器权限，或改用 ZIP 导出。','Could not save to folder. Check browser permissions or use ZIP export.'));}
     }finally{btn.disabled=!image;zipBtn.disabled=!image;}
   }
   async function downloadZip(){
@@ -403,13 +470,13 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       const zip=makeZip(files),url=URL.createObjectURL(zip),a=document.createElement('a');
       a.href=url;a.download=`${sourceName}_拆分结果.zip`;document.body.appendChild(a);a.click();a.remove();
       setTimeout(()=>URL.revokeObjectURL(url),30000);
-      setStatus(`完成：已打包 ${files.length} 张图片。`,'success');
-    }catch(err){console.error(err);setStatus('打包失败，图片可能过大导致内存不足。可以尝试增大单张高度后重试。');}
+      setStatus(tr(`完成：已打包 ${files.length} 张图片。`,`Done: Packed ${files.length} slices into ZIP.`),'success');
+    }catch(err){console.error(err);setStatus(tr('打包失败，图片可能过大导致内存不足。可以尝试增大单张高度后重试。','ZIP export failed, possibly due to memory limits. Try a larger slice height.'));}
     finally{btn.disabled=!image;folderBtn.disabled=!image;}
   }
   $('folderBtn').addEventListener('click',writeToFolder);
   $('zipBtn').addEventListener('click',downloadZip);
-  update();
+  applyLanguage();
 })();
 </script>
 </body>
