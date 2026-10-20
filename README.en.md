@@ -1,16 +1,18 @@
 # Pic2Pics
 
-[简体中文](README.md) | **English**
+[简体中文](README.md) | [English](README.en.md)
 
-**One Pic. Many Pics. · Split long screenshots in one click.**
+**Local Processing. No Uploads. One Pic. Many Pics.**
 
-I often send long screenshots to AI, but the small text and details can be hard to read. I tried a few tools, but none felt simple enough—so I made Pic2Pics.
+**[▶ Try Pic2Pics](https://duomiantl.github.io/pic2pics/)**
 
-Paste an image, split it automatically, and export in one click.
+I often send long screenshots to AI, but small text and details can be hard to read. I tried a few tools, but none felt convenient enough. So I made Pic2Pics.
 
-- Paste screenshots, drag and drop, or choose a file
-- Adjust slice count, height, and overlap
+**One long image. Automatically split. One-click export.**
+
+- Images are processed locally in your browser
+- Paste or drag and drop images
+- Adjustable slice count, height, and overlap
 - Designed for desktop and mobile browsers (mobile testing is ongoing)
-- Process images locally in your browser; no upload required
 
-**[Try Pic2Pics](https://duomiantl.github.io/pic2pics/)** · [MIT License](LICENSE)
+[MIT License](LICENSE)
