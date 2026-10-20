@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="assets/logo-light.svg">
-  <img src="assets/logo-light.svg" alt="Pic2Pics" width="340">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-light.svg">
+  <img src="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-light.svg" alt="Pic2Pics" width="340">
 </picture>
 
 [简体中文](README.md) | [English](README.en.md)
