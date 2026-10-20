@@ -49,6 +49,13 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
 .stat{background:#f7f8fa;border-radius:10px;padding:10px 9px;min-width:0}
 .stat span{display:block;font-size:11px;color:var(--muted)}
 .stat strong{display:block;margin-top:4px;font-size:15px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.count-control{display:flex;align-items:center;gap:2px;margin-top:2px;max-width:100%}
+.count-control input{width:100%;min-width:0;flex:1;padding:1px 0;border:0;background:transparent;border-radius:3px;font-weight:750;font-size:16px;line-height:24px;-moz-appearance:textfield}
+.count-control input::-webkit-outer-spin-button,.count-control input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.count-control input:focus{outline:2px solid #9bbcff;outline-offset:1px;box-shadow:none}
+.count-steps{display:flex;flex-direction:column;gap:2px}
+.count-steps button{border:1px solid #e0e5ec;border-radius:4px;background:#fff;color:#596679;cursor:pointer;width:21px;height:16px;font-size:13px;line-height:11px;padding:0}
+.count-steps button:disabled{opacity:.35;cursor:not-allowed}
 .actions{display:grid;gap:8px;margin-top:16px}
 .btn{border:0;border-radius:10px;padding:11px 13px;cursor:pointer;font-weight:650;transition:.15s}
 .btn:disabled{opacity:.45;cursor:not-allowed}
@@ -83,6 +90,8 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
         <p>截图后在页面空白处按 Ctrl+V（Windows）或 ⌘V（Mac）即可粘贴。也可以拖入图片或选择本地文件。编辑参数时粘贴操作不会被截获。</p>
         <h3>切分高度怎么选？</h3>
         <p>1800 px 是本工具的默认起始值，不是 GPT 官方规定。没有适用于所有图片的固定高度：文字越小、内容越密集，可以尝试 1200–1600 px；想保留更多页面上下文，可以尝试 1800–2400 px。切分后仍应检查文字是否清晰。</p>
+        <h3>分图数量</h3>
+        <p>可以直接输入图片张数，或使用 + / − 调整；工具会联动计算切分高度。原图过短或重叠设置过大时，实际数量可能受最小切分高度限制。</p>
         <h3>重叠区域有什么用？</h3>
         <p>相邻图片会重复显示一小段内容，方便理解上下文。默认 120 px；不需要重复内容时可以设为 0。重叠越大，分图数量和文件体积可能越多。</p>
         <h3>导出到文件夹</h3>
@@ -132,7 +141,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
 
       <div class="stats">
         <div class="stat"><span>原图尺寸</span><strong id="dimensions">—</strong></div>
-        <div class="stat"><span>预计分图</span><strong id="count">—</strong></div>
+        <div class="stat"><span>分图数量</span><div class="count-control"><input id="count" type="number" min="1" step="1" value="1" aria-label="分图数量" disabled><div class="count-steps"><button type="button" id="countPlus" aria-label="增加一张" disabled>+</button><button type="button" id="countMinus" aria-label="减少一张" disabled>−</button></div></div></div>
         <div class="stat"><span>单图宽度</span><strong id="widthStat">—</strong></div>
       </div>
       <div class="actions">
@@ -171,6 +180,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     $('zipBtn').textContent = '下载全部分图（ZIP）';
   }
   let image=null, sourceName='长截图', sourceUrl=null, loadedFile=null;
+  let editMode='height'; // In count mode, preserve the requested slice count when overlap changes.
 
   const safeBaseName = name => (name||'长截图').replace(/\.[^.]+$/,'').replace(/[\\/:*?"<>|]/g,'_').slice(0,90)||'长截图';
   function getSettings(){
@@ -191,16 +201,48 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     }
     return starts;
   }
+  function countLimit(){
+    if(!image)return 1;
+    const overlap=Math.max(0,Math.round(Number(overlapInput.value)||0));
+    // Every resulting segment must contain at least one new row of pixels.
+    return Math.max(1,Math.min(9999,image.naturalHeight));
+  }
+  function useCount(value){
+    if(!image)return;
+    const wanted=Math.max(1,Math.min(countLimit(),Math.round(Number(value)||1)));
+    const H=image.naturalHeight;
+    const overlap=Math.max(0,Math.round(Number(overlapInput.value)||0));
+    // To produce exactly N slices at our "height, then stride" cutting scheme:
+    // For N>=2, the minimum feasible h is ceil((H + (N-1)*overlap)/N).
+    // The count may be impossible if overlap approaches the image height.
+    if(wanted===1){
+      heightInput.max=Math.max(20000,H);
+      heightInput.value=Math.max(200,H);
+    }else{
+      let h=Math.ceil((H+(wanted-1)*overlap)/wanted);
+      h=Math.max(overlap+1,200,h);
+      heightInput.max=Math.max(20000,H,h);
+      heightInput.value=h;
+      // For unusual overlap or minimum-height constraints, the calculated
+      // height can lead to fewer slices. The actual count always wins.
+    }
+    update();
+  }
   function update(){
     if(!image){
-      $('dimensions').textContent='—';$('count').textContent='—';$('widthStat').textContent='—';
+      $('dimensions').textContent='—';$('count').value='';$('count').disabled=true;
+      $('countPlus').disabled=true;$('countMinus').disabled=true;$('widthStat').textContent='—';
       $('folderBtn').disabled=true;$('zipBtn').disabled=true;$('previewTag').textContent='等待图片';
       document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Number(b.dataset.height)===Number(heightInput.value)));
       return;
     }
     const s=getSettings(), starts=getStarts(s);
     $('dimensions').textContent=`${image.naturalWidth} × ${image.naturalHeight}`;
-    $('count').textContent=starts.length.toLocaleString('zh-CN');
+    $('count').value=starts.length;
+    $('count').disabled=false;
+    $('count').max=countLimit();
+    $('countPlus').disabled=starts.length>=countLimit();
+    $('countMinus').disabled=starts.length<=1;
     $('widthStat').textContent=`${image.naturalWidth} px`;
     $('folderBtn').disabled=false;$('zipBtn').disabled=false;
     $('previewTag').textContent=`${starts.length} 张 · 重叠 ${s.o}px`;
@@ -237,7 +279,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     sourceUrl=URL.createObjectURL(file);
     const img=new Image();
     img.onload=()=>{
-      image=img;loadedFile=file;sourceName=safeBaseName(file.name);
+      image=img;editMode='height';heightInput.max=20000;loadedFile=file;sourceName=safeBaseName(file.name);
       $('fileMeta').textContent=`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;
       setStatus('图片已载入。','success');update();
     };
@@ -274,9 +316,15 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   ['dragenter','dragover'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.add('drag');}));
   ['dragleave','drop'].forEach(ev=>dropZone.addEventListener(ev,e=>{e.preventDefault();dropZone.classList.remove('drag');}));
   dropZone.addEventListener('drop',e=>loadFile(e.dataTransfer.files&&e.dataTransfer.files[0]));
-  heightInput.addEventListener('change',update);
-  overlapInput.addEventListener('change',update);
-  document.querySelectorAll('[data-height]').forEach(b=>b.addEventListener('click',()=>{heightInput.value=b.dataset.height;update();}));
+  heightInput.addEventListener('change',()=>{editMode='height';heightInput.max=20000;update();});
+  overlapInput.addEventListener('change',()=>{
+    if(editMode==='count' && image)useCount($('count').value);
+    else update();
+  });
+  $('count').addEventListener('change',()=>{editMode='count';useCount($('count').value);});
+  $('countPlus').addEventListener('click',()=>{editMode='count';useCount(Number($('count').value)+1);});
+  $('countMinus').addEventListener('click',()=>{editMode='count';useCount(Number($('count').value)-1);});
+  document.querySelectorAll('[data-height]').forEach(b=>b.addEventListener('click',()=>{editMode='height';heightInput.max=20000;heightInput.value=b.dataset.height;update();}));
 
   // Help popover
   const helpBtn=$('helpBtn'), popover=$('helpPopover');
