@@ -14,6 +14,20 @@ button,input,select{font:inherit}
 .shell{max-width:1120px;margin:0 auto;padding:28px 20px 42px}
 header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:20px}
 h1{font-size:25px;letter-spacing:-.5px;line-height:1.2;margin:0;font-weight:750}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.brand-logo{display:block;width:260px;max-width:100%;height:auto}
+.brand-logo .ink{fill:#20242b}.brand-logo .accent{fill:#165ce0}
+body[data-theme="dark"] .brand-logo .ink{fill:#f0f4fc}
+body[data-theme="dark"] .brand-logo .accent{fill:#5195ff}
+.mobile-more{margin-top:9px;padding:7px 0}.mobile-more summary{cursor:pointer;font-size:12px;color:#66738a;text-align:center}
+.photo-modal{position:fixed;inset:0;z-index:90;background:rgba(18,27,43,.68);display:flex;align-items:center;justify-content:center;padding:12px}
+.photo-dialog{background:#fff;color:#20242b;border-radius:16px;width:min(460px,100%);max-height:95dvh;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.photo-dialog-header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.photo-dialog-header h2{font-size:16px;margin:0}
+.photo-dialog-header button{background:#f0f2f6;border:0;border-radius:9px;width:34px;height:34px;font-size:21px;cursor:pointer}
+.photo-view{background:#f2f4f7;display:flex;align-items:center;justify-content:center;min-height:120px;max-height:55dvh;overflow:auto;border-radius:10px}
+.photo-view img{max-width:100%;max-height:55dvh;object-fit:contain}
+.photo-dialog .buttons{display:flex;gap:8px;flex-wrap:wrap}
+.photo-dialog .buttons button{flex:1;min-width:110px}
+.photo-dialog p{font-size:12px;color:#657081;margin:0;line-height:1.6}
 .header-right{position:relative;flex-shrink:0;display:flex;align-items:center;gap:8px}.lang-btn{border:1px solid var(--line);border-radius:999px;background:#fff;color:#3e4652;cursor:pointer;padding:9px 11px;font-size:12px;font-weight:650;min-width:54px}.lang-btn:hover{background:#fbfcff;border-color:#c6d2e4}
 .help-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#3e4652;cursor:pointer;box-shadow:0 2px 6px #1e293b08}
 .help-btn:hover{border-color:#c6d2e4;background:#fbfcff}
@@ -79,7 +93,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
 <body>
 <div class="shell">
   <header>
-    <div class="brand"><h1><svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0 1002 212" class="brand-logo" role="img" aria-labelledby="logoTitle"><title id="logoTitle">Pic2Pics</title><style> .ink{fill:#20242b} .accent{fill:#165ce0} @media (prefers-color-scheme:dark){.ink{fill:#f0f4fc}.accent{fill:#5195ff}} </style><defs><clipPath id="letterClips" clipPathUnits="userSpaceOnUse"><path d="M188 1493H827Q1112 1493 1264.5 1366.5Q1417 1240 1417 1006Q1417 771 1264.5 644.5Q1112 518 827 518H573V0H188ZM573 1214V797H786Q898 797 959 851.5Q1020 906 1020 1006Q1020 1106 959 1160Q898 1214 786 1214Z" transform="translate(506.33 180) scale(0.105 -0.105)"/><path d="M172 1120H530V0H172ZM172 1556H530V1264H172Z" transform="translate(661.415 180) scale(0.105 -0.105)"/><path d="M1077 1085V793Q1004 843 930.5 867Q857 891 778 891Q628 891 544.5 803.5Q461 716 461 559Q461 402 544.5 314.5Q628 227 778 227Q862 227 937.5 252Q1013 277 1077 326V33Q993 2 906.5 -13.5Q820 -29 733 -29Q430 -29 259 126.5Q88 282 88 559Q88 836 259 991.5Q430 1147 733 1147Q821 1147 906.5 1131.5Q992 1116 1077 1085Z" transform="translate(732.605 180) scale(0.105 -0.105)"/><path d="M1047 1085V813Q932 861 825 885Q718 909 623 909Q521 909 471.5 883.5Q422 858 422 805Q422 762 459.5 739Q497 716 594 705L657 696Q932 661 1027 581Q1122 501 1122 330Q1122 151 990 61Q858 -29 596 -29Q485 -29 366.5 -11.5Q248 6 123 41V313Q230 261 342.5 235Q455 209 571 209Q676 209 729 238Q782 267 782 324Q782 372 745.5 395.5Q709 419 600 432L537 440Q298 470 202 551Q106 632 106 797Q106 975 228 1061Q350 1147 602 1147Q701 1147 810 1132Q919 1117 1047 1085Z" transform="translate(857.555 180) scale(0.105 -0.105)"/></clipPath></defs><g class="ink" stroke="none"><path d="M188 1493H827Q1112 1493 1264.5 1366.5Q1417 1240 1417 1006Q1417 771 1264.5 644.5Q1112 518 827 518H573V0H188ZM573 1214V797H786Q898 797 959 851.5Q1020 906 1020 1006Q1020 1106 959 1160Q898 1214 786 1214Z" transform="translate(18 180) scale(0.105 -0.105)"/><path d="M172 1120H530V0H172ZM172 1556H530V1264H172Z" transform="translate(173.085 180) scale(0.105 -0.105)"/><path d="M1077 1085V793Q1004 843 930.5 867Q857 891 778 891Q628 891 544.5 803.5Q461 716 461 559Q461 402 544.5 314.5Q628 227 778 227Q862 227 937.5 252Q1013 277 1077 326V33Q993 2 906.5 -13.5Q820 -29 733 -29Q430 -29 259 126.5Q88 282 88 559Q88 836 259 991.5Q430 1147 733 1147Q821 1147 906.5 1131.5Q992 1116 1077 1085Z" transform="translate(244.275 180) scale(0.105 -0.105)"/></g><g class="accent" stroke="none"><path d="M590 283H1247V0H162V283L707 764Q780 830 815 893Q850 956 850 1024Q850 1129 779.5 1193Q709 1257 592 1257Q502 1257 395 1218.5Q288 1180 166 1104V1432Q296 1475 423 1497.5Q550 1520 672 1520Q940 1520 1088.5 1402Q1237 1284 1237 1073Q1237 951 1174 845.5Q1111 740 909 563Z" transform="translate(369.225 180) scale(0.105 -0.105)"/></g><g class="ink" clip-path="url(#letterClips)"><rect x="0" y="15" width="1013" height="8.7"/>
+    <div class="brand"><h1><svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0 1002 212" class="brand-logo" role="img" aria-labelledby="logoTitle"><title id="logoTitle">Pic2Pics</title><style> .ink{fill:#20242b} .accent{fill:#165ce0}  </style><defs><clipPath id="letterClips" clipPathUnits="userSpaceOnUse"><path d="M188 1493H827Q1112 1493 1264.5 1366.5Q1417 1240 1417 1006Q1417 771 1264.5 644.5Q1112 518 827 518H573V0H188ZM573 1214V797H786Q898 797 959 851.5Q1020 906 1020 1006Q1020 1106 959 1160Q898 1214 786 1214Z" transform="translate(506.33 180) scale(0.105 -0.105)"/><path d="M172 1120H530V0H172ZM172 1556H530V1264H172Z" transform="translate(661.415 180) scale(0.105 -0.105)"/><path d="M1077 1085V793Q1004 843 930.5 867Q857 891 778 891Q628 891 544.5 803.5Q461 716 461 559Q461 402 544.5 314.5Q628 227 778 227Q862 227 937.5 252Q1013 277 1077 326V33Q993 2 906.5 -13.5Q820 -29 733 -29Q430 -29 259 126.5Q88 282 88 559Q88 836 259 991.5Q430 1147 733 1147Q821 1147 906.5 1131.5Q992 1116 1077 1085Z" transform="translate(732.605 180) scale(0.105 -0.105)"/><path d="M1047 1085V813Q932 861 825 885Q718 909 623 909Q521 909 471.5 883.5Q422 858 422 805Q422 762 459.5 739Q497 716 594 705L657 696Q932 661 1027 581Q1122 501 1122 330Q1122 151 990 61Q858 -29 596 -29Q485 -29 366.5 -11.5Q248 6 123 41V313Q230 261 342.5 235Q455 209 571 209Q676 209 729 238Q782 267 782 324Q782 372 745.5 395.5Q709 419 600 432L537 440Q298 470 202 551Q106 632 106 797Q106 975 228 1061Q350 1147 602 1147Q701 1147 810 1132Q919 1117 1047 1085Z" transform="translate(857.555 180) scale(0.105 -0.105)"/></clipPath></defs><g class="ink" stroke="none"><path d="M188 1493H827Q1112 1493 1264.5 1366.5Q1417 1240 1417 1006Q1417 771 1264.5 644.5Q1112 518 827 518H573V0H188ZM573 1214V797H786Q898 797 959 851.5Q1020 906 1020 1006Q1020 1106 959 1160Q898 1214 786 1214Z" transform="translate(18 180) scale(0.105 -0.105)"/><path d="M172 1120H530V0H172ZM172 1556H530V1264H172Z" transform="translate(173.085 180) scale(0.105 -0.105)"/><path d="M1077 1085V793Q1004 843 930.5 867Q857 891 778 891Q628 891 544.5 803.5Q461 716 461 559Q461 402 544.5 314.5Q628 227 778 227Q862 227 937.5 252Q1013 277 1077 326V33Q993 2 906.5 -13.5Q820 -29 733 -29Q430 -29 259 126.5Q88 282 88 559Q88 836 259 991.5Q430 1147 733 1147Q821 1147 906.5 1131.5Q992 1116 1077 1085Z" transform="translate(244.275 180) scale(0.105 -0.105)"/></g><g class="accent" stroke="none"><path d="M590 283H1247V0H162V283L707 764Q780 830 815 893Q850 956 850 1024Q850 1129 779.5 1193Q709 1257 592 1257Q502 1257 395 1218.5Q288 1180 166 1104V1432Q296 1475 423 1497.5Q550 1520 672 1520Q940 1520 1088.5 1402Q1237 1284 1237 1073Q1237 951 1174 845.5Q1111 740 909 563Z" transform="translate(369.225 180) scale(0.105 -0.105)"/></g><g class="ink" clip-path="url(#letterClips)"><rect x="0" y="15" width="1013" height="8.7"/>
 <rect x="0" y="26" width="1013" height="8.7"/>
 <rect x="0" y="37" width="1013" height="8.7"/>
 <rect x="0" y="48" width="1013" height="8.7"/>
@@ -113,7 +127,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
         <h3>导出到文件夹</h3>
         <p>点击「导出到本地文件夹」，选择电脑上的一个父文件夹，工具会在里面新建一个以原图名称命名的结果文件夹，并将所有分图写入其中。浏览器会要求你确认保存位置。</p>
         <h3>ZIP 备用导出</h3>
-        <p>手机端优先使用 ZIP 导出：iPhone 可在下载后通过“文件”App 查找并解压；Android 通常可在“下载”目录中找到 ZIP，再用系统文件管理器解压。不同浏览器的下载提示可能略有差异。电脑端也可以使用 ZIP 备用导出。</p>
+        <p>手机端优先点击「保存到相册」并在系统分享菜单中选择保存图片。浏览器不能直接写入相册；如果不支持多图分享，可以使用「逐张查看与保存」，也可以选择 ZIP 备用下载。电脑端可使用 ZIP 导出。</p>
         <h3>隐私与清晰度</h3>
         <p>图片在当前浏览器中本地处理，不会上传到服务器。手机处理超大图片时可能受内存限制；如失败，可提高单张高度、减少分图数量后重试。PNG 适合文字、代码和网页截图；JPG 文件通常更小，但会有有损压缩。</p>
       </aside>
@@ -160,9 +174,15 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
         <div class="stat"><span>单图宽度</span><strong id="widthStat">—</strong></div>
       </div>
       <div class="actions">
+        <button id="photoBtn" class="btn primary" disabled hidden>保存到相册</button>
         <button id="folderBtn" class="btn primary" disabled>导出到本地文件夹</button>
         <button id="zipBtn" class="btn secondary" disabled>打包下载 ZIP</button>
       </div>
+      <details class="mobile-more" id="mobileMore" hidden><summary>其他保存方式</summary>
+        <div class="actions" id="mobileAlternatives">
+          <button id="galleryBtn" class="btn secondary" disabled>逐张查看与保存</button>
+        </div>
+      </details>
       <div class="status" id="status" role="status" aria-live="polite"></div>
     </section>
 
@@ -181,7 +201,22 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     </section>
   </main>
 </div>
-
+<div class="photo-modal" id="photoModal" hidden role="dialog" aria-modal="true" aria-labelledby="photoModalTitle">
+  <div class="photo-dialog">
+    <div class="photo-dialog-header"><h2 id="photoModalTitle">逐张保存图片</h2><button type="button" id="closePhoto" aria-label="关闭">×</button></div>
+    <p id="photoTip">可尝试分享当前图片并选择保存到相册，或长按图片使用浏览器提供的保存操作。</p>
+    <div class="photo-view"><img id="photoCurrent" alt="拆分图片预览"></div>
+    <div class="buttons">
+      <button class="btn secondary" type="button" id="photoPrev">上一张</button>
+      <button class="btn secondary" type="button" id="photoNext">下一张</button>
+    </div>
+    <p id="photoPosition"></p>
+    <div class="buttons">
+      <button class="btn primary" type="button" id="photoSingleShare">分享当前图片</button>
+      <button class="btn secondary" type="button" id="photoSingleDownload">下载当前图片</button>
+    </div>
+  </div>
+</div>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -189,10 +224,11 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
   const preview=$('preview'), ctx=preview.getContext('2d');
   const mobileMode = window.matchMedia('(max-width: 800px), (pointer: coarse)').matches;
   if (mobileMode) {
-    $('folderBtn').hidden = true;
-    $('zipBtn').classList.remove('secondary');
-    $('zipBtn').classList.add('primary');
-    $('zipBtn').textContent = '下载全部分图（ZIP）';
+    $('folderBtn').hidden=true;
+    $('photoBtn').hidden=false;
+    $('mobileMore').hidden=false;
+    $('mobileAlternatives').appendChild($('zipBtn'));
+    $('zipBtn').textContent='下载 ZIP';
   }
   let image=null, sourceName='长截图', sourceUrl=null, loadedFile=null;
   let editMode='height'; // In count mode, preserve the requested slice count when overlap changes.
@@ -247,7 +283,9 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     if(!image){
       $('dimensions').textContent='—';$('count').value='';$('count').disabled=true;
       $('countPlus').disabled=true;$('countMinus').disabled=true;$('widthStat').textContent='—';
-      $('folderBtn').disabled=true;$('zipBtn').disabled=true;$('previewTag').textContent=tr('等待图片','Waiting for image');
+      $('folderBtn').disabled=true;$('zipBtn').disabled=true;
+      photoBtn.disabled=true;$('galleryBtn').disabled=true;
+      $('previewTag').textContent=tr('等待图片','Waiting for image');
       document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Number(b.dataset.height)===Number(heightInput.value)));
       return;
     }
@@ -260,6 +298,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     $('countMinus').disabled=starts.length<=1;
     $('widthStat').textContent=`${image.naturalWidth} px`;
     $('folderBtn').disabled=false;$('zipBtn').disabled=false;
+    if(mobileMode)queuePhotoPreparation();
     $('previewTag').textContent=tr(`${starts.length} 张 · 重叠 ${s.o}px`,`${starts.length} slices · ${s.o}px overlap`);
     document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Number(b.dataset.height)===s.h));
     drawPreview(s,starts);
@@ -364,6 +403,10 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     '分图数量':'Number of slices','单图宽度':'Slice width',
     '导出到本地文件夹':'Save to local folder','打包下载 ZIP':'Download ZIP',
     '下载全部分图（ZIP）':'Download all slices (ZIP)',
+    '保存到相册':'Save to Photos','其他保存方式':'Other save options',
+    '逐张查看与保存':'View & save individually','下载 ZIP':'Download ZIP',
+    '逐张保存图片':'Save images individually','上一张':'Previous','下一张':'Next',
+    '分享当前图片':'Share this image','下载当前图片':'Download this image',
     '切分预览':'Slice preview','等待图片':'Waiting for image',
     '预览将在这里显示':'Preview will appear here',
     'PNG · 无损':'PNG · Lossless','JPG · 体积较小':'JPG · Smaller file',
@@ -380,7 +423,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     'Type the desired number of slices or use + / −. Slice height adjusts automatically. Very short images or a large overlap may limit the number of possible slices.',
     'Adjacent slices repeat a small region to preserve context. The default is 120 px; use 0 for no overlap. More overlap may increase the number and size of outputs.',
     'Select a parent folder when you click Save to local folder. A new subfolder named after the source image will contain all slices. Your browser will request permission.',
-    'For phones, download a ZIP. On iPhone, find and unzip it in the Files app; on Android, use the Downloads folder and file manager. The steps depend on your browser. Desktop users can also download a ZIP.',
+    'On mobile, tap Save to Photos and choose a photo-saving action in the system share sheet. Websites cannot silently save to the photo library. If sharing multiple images is unavailable, use View & save individually or download a ZIP. Desktop users can also export a ZIP.',
     'Images are processed locally in your browser and are not uploaded. Very large screenshots can exceed mobile memory limits; try reducing the number of slices. PNG suits text and webpages; JPG uses lossy compression.'
   ];
   const originalTextNodes=[];
@@ -392,6 +435,10 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     if(Object.hasOwn(UI_TEXT,base.trim()))originalTextNodes.push([node,base,UI_TEXT[base.trim()]]);
   }
   const helpOriginal=[...$('helpPopover').querySelectorAll('p')].map(p=>p.textContent);
+  const galleryTipZh='可尝试分享当前图片并选择保存到相册，或长按图片使用浏览器提供的保存操作。';
+  const galleryTipEn='Try sharing the current image to Photos, or long-press it for your browser\'s image-saving options.';
+  const photoState={files:[],key:'',version:0,timer:null,index:0,url:null,ready:false};
+  const photoBtn=$('photoBtn');
   const helpParas=[...$('helpPopover').querySelectorAll('p')];
   const originalLabels={plus:$('countPlus').getAttribute('aria-label'),minus:$('countMinus').getAttribute('aria-label'),count:$('count').getAttribute('aria-label')};
   function applyLanguage(){
@@ -407,7 +454,11 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     $('count').setAttribute('aria-label',tr(originalLabels.count,'Number of slices'));
     $('closeHelp').setAttribute('aria-label',tr('关闭','Close'));
     $('fileMeta').textContent=loadedFile?loadedFile.name+' · '+(loadedFile.size/1024/1024).toFixed(2)+' MB':tr('尚未选择图片','No image selected');
-    if(mobileMode)$('zipBtn').textContent=tr('下载全部分图（ZIP）','Download all slices (ZIP)');
+    if(mobileMode){
+      $('photoTip').textContent=tr(galleryTipZh,galleryTipEn);
+      photoBtn.textContent=photoState.ready?tr('保存到相册','Save to Photos'):tr('准备图片中…','Preparing images…');
+      $('zipBtn').textContent=tr('下载 ZIP','Download ZIP');
+    }
     if(image)setStatus(tr('图片已载入。','Image loaded.'),'success');
     else setStatus('');
     update();
@@ -436,13 +487,110 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
     const c=concatBytes(central),end=new Uint8Array([0x50,0x4b,0x05,0x06,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(c.length),...u32(offset),...u16(0)]);
     return new Blob([...local,c,end],{type:'application/zip'});
   }
+  function queuePhotoPreparation(){
+    if(!mobileMode||!image)return;
+    const key=[sourceUrl,image.naturalWidth,image.naturalHeight,heightInput.value,overlapInput.value,formatInput.value].join('|');
+    if(key===photoState.key)return;
+    photoState.key=key;photoState.ready=false;photoState.files=[];
+    const version=++photoState.version;
+    clearTimeout(photoState.timer);
+    photoBtn.disabled=true;$('galleryBtn').disabled=true;
+    photoBtn.textContent=tr('准备图片中…','Preparing images…');
+    photoState.timer=setTimeout(()=>{void preparePhotoFiles(version)},250);
+  }
+  async function preparePhotoFiles(version){
+    try{
+      const files=[];
+      const type=formatInput.value==='image/webp'?'image/png':formatInput.value;
+      await makeSlices(async({blob,filename})=>{
+        if(version!==photoState.version)return;
+        const ext=extension(type);
+        const photoName=filename.replace(/\.[^.]+$/,'.'+ext);
+        files.push(new File([blob],photoName,{type}));
+      },{type,silent:true,isCurrent:()=>version===photoState.version});
+      if(version!==photoState.version)return;
+      photoState.files=files;
+      photoState.ready=files.length>0;
+      photoBtn.disabled=!photoState.ready;$('galleryBtn').disabled=!photoState.ready;
+      photoBtn.textContent=tr('保存到相册','Save to Photos');
+    }catch(err){
+      if(version!==photoState.version)return;
+      console.error(err);photoState.files=[];photoState.ready=false;
+      photoBtn.disabled=true;$('galleryBtn').disabled=true;
+      photoBtn.textContent=tr('准备失败','Preparation failed');
+      setStatus(tr('图片准备失败，请尝试 ZIP 导出。','Could not prepare images. Please try ZIP export.'));
+    }
+  }
+  function showPhotoModal(){
+    if(!photoState.ready)return;
+    photoState.index=0;
+    $('photoModal').hidden=false;renderPhotoModal();
+  }
+  function renderPhotoModal(){
+    const i=photoState.index,files=photoState.files;
+    if(photoState.url)URL.revokeObjectURL(photoState.url);
+    photoState.url=URL.createObjectURL(files[i]);
+    $('photoCurrent').src=photoState.url;
+    $('photoPosition').textContent=tr(`第 ${i+1} / ${files.length} 张`,`Image ${i+1} / ${files.length}`);
+    $('photoPrev').disabled=i===0;
+    $('photoNext').disabled=i===files.length-1;
+  }
+  function hidePhotoModal(){
+    $('photoModal').hidden=true;
+    $('photoCurrent').removeAttribute('src');
+    if(photoState.url)URL.revokeObjectURL(photoState.url);
+    photoState.url=null;
+  }
+  // Native file sharing must happen directly in a user click.
+  async function savePhotos(){
+    const files=photoState.files;
+    if(!photoState.ready||!files.length)return;
+    if(typeof navigator.share==='function' && typeof navigator.canShare==='function'
+       && navigator.canShare({files})){
+      try{
+        await navigator.share({files});
+        setStatus(tr('系统分享已完成，请确认图片已保存到相册。','System sharing finished; check that the images were saved to Photos.'),'success');
+      }catch(err){
+        if(err&&err.name==='AbortError')setStatus(tr('已取消分享。','Sharing cancelled.'));
+        else{setStatus(tr('无法一次分享所有图片，请逐张保存。','Could not share all images together. Save them individually.'));showPhotoModal();}
+      }
+    }else{
+      setStatus(tr('当前设备不支持批量图片分享，请逐张保存。','Bulk image sharing is unsupported here. Save images individually.'));
+      showPhotoModal();
+    }
+  }
+  async function shareCurrentPhoto(){
+    const file=photoState.files[photoState.index];
+    if(!file)return;
+    if(typeof navigator.share==='function' && typeof navigator.canShare==='function'
+       && navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file]});}
+      catch(err){if(err?.name!=='AbortError')setStatus(tr('无法分享图片，请尝试长按图片或下载。','Sharing failed. Try long-pressing or downloading the image.'));}
+    }else{setStatus(tr('此浏览器不支持图片分享，请长按图片或下载。','Image sharing unavailable; long-press or download the image.'));}
+  }
+  $('photoBtn').addEventListener('click',savePhotos);
+  $('galleryBtn').addEventListener('click',showPhotoModal);
+  $('closePhoto').addEventListener('click',hidePhotoModal);
+  $('photoModal').addEventListener('click',e=>{if(e.target===$('photoModal'))hidePhotoModal();});
+  $('photoPrev').addEventListener('click',()=>{photoState.index=Math.max(0,photoState.index-1);renderPhotoModal();});
+  $('photoNext').addEventListener('click',()=>{photoState.index=Math.min(photoState.files.length-1,photoState.index+1);renderPhotoModal();});
+  $('photoSingleShare').addEventListener('click',shareCurrentPhoto);
+  $('photoSingleDownload').addEventListener('click',()=>{
+    const file=photoState.files[photoState.index];
+    if(!file)return;
+    const url=URL.createObjectURL(file),a=document.createElement('a');
+    a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  });
+  formatInput.addEventListener('change',update);
   function canvasBlob(canvas,type){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('图片编码失败')),type));}
   function extension(type){return type==='image/jpeg'?'jpg':type==='image/webp'?'webp':'png';}
-  async function makeSlices(onSlice){
-    const s=getSettings(),starts=getStarts(s),type=formatInput.value,ext=extension(type),canvas=document.createElement('canvas');
+  async function makeSlices(onSlice,options={}){
+    const s=getSettings(),starts=getStarts(s),type=options.type||formatInput.value,ext=extension(type),canvas=document.createElement('canvas');
     const c=canvas.getContext('2d',{alpha:type!=='image/jpeg'});canvas.width=image.naturalWidth;
     const digits=String(starts.length).length;
     for(let i=0;i<starts.length;i++){
+      if(options.isCurrent && !options.isCurrent())return;
       const y=starts[i],height=Math.min(s.h,image.naturalHeight-y);
       canvas.height=height;c.clearRect(0,0,canvas.width,height);
       if(type==='image/jpeg'){c.fillStyle='#fff';c.fillRect(0,0,canvas.width,height);}
@@ -450,7 +598,7 @@ input[type=number]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 
       const blob=await canvasBlob(canvas,type);
       const filename=`${sourceName}_${String(i+1).padStart(digits,'0')}.${ext}`;
       await onSlice({blob,filename,index:i+1,total:starts.length});
-      setStatus(tr(`正在处理 ${i+1} / ${starts.length} 张…`,`Processing ${i+1} / ${starts.length} slices…`));
+      if(!options.silent)setStatus(tr(`正在处理 ${i+1} / ${starts.length} 张…`,`Processing ${i+1} / ${starts.length} slices…`));
       await new Promise(r=>setTimeout(r,0));
     }
     return starts.length;
