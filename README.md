@@ -1,14 +1,14 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-light.svg">
-  <img src="https://raw.githubusercontent.com/DuOmiantl/pic2pics/main/assets/logo-light.svg" alt="Pic2Pics" width="340">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/DuOMulti/pic2pics/main/assets/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/DuOMulti/pic2pics/main/assets/logo-light.svg">
+  <img src="https://raw.githubusercontent.com/DuOMulti/pic2pics/main/assets/logo-light.svg" alt="Pic2Pics" width="340">
 </picture>
 
 [简体中文](README.md) | [English](README.en.md)
 
 **本地拆图，不上传。One Pic. Many Pics.**
 
-**[▶ 在线使用 Pic2Pics](https://duomiantl.github.io/pic2pics/)**
+**[▶ 在线使用 Pic2Pics](https://duomulti.github.io/pic2pics/)**
 
 经常需要把长截图发给 AI 分析，但文字和细节容易看不清。试了几个工具，都不够方便，于是自己做了 Pic2Pics。
 
